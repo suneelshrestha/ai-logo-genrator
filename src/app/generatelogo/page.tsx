@@ -63,8 +63,8 @@ export default function ImageLoadingPage() {
         console.log('totalTime', totalTimeString);
         setStarted(false);
       }
-    } catch (error) {
-      console.error('Error generating the logo image:', error);
+    } catch (error: any) {
+      console.error('Error generating the logo image:', error.message);
       setStarted(false);
     }
   };
