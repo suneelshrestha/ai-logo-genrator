@@ -2,10 +2,13 @@
 
 import {signIn, useSession} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 export default function OAuth() {
+  const {data: session, status} = useSession();
   const router = useRouter();
+
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   const handelGoogleLogin = async () => {
     try {
@@ -14,12 +17,28 @@ export default function OAuth() {
         console.log('error');
       } else {
         console.log('success google login');
-        router.push('/');
       }
+      setRefresh(true);
     } catch (error) {
       console.log('Error');
     }
   };
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      const user = session?.user;
+      if (user) {
+        console.log('User is authenticated:', user);
+        // Perform any additional actions with the authenticated user
+        router.push('/');
+      } else {
+        console.log('User is not authenticated');
+      }
+    } else if (status === 'unauthenticated') {
+      console.log('User is not authenticated');
+    }
+  }, [status, session]);
+
   return (
     <>
       <div className="w-full gap-4 mb-6 ">
