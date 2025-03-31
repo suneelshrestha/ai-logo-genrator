@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import googlelogin from '../app/api/googlelogin/route';
+import {NextResponse} from 'next/server';
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
   providers: [
@@ -40,8 +40,23 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
   ],
   callbacks: {
     async signIn({user}) {
-      await googlelogin(user);
-      return true;
+      try {
+        await dbConnect();
+        const userExists = await User.findOne({email: user.email});
+
+        if (!userExists) {
+          const newUser = new User({
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          });
+          await newUser.save();
+        }
+        return true; // Return true to indicate successful sign-in
+      } catch (error) {
+        console.error('Error during sign-in:', error);
+        return false; // Return false to indicate sign-in failure
+      }
     },
   },
 });

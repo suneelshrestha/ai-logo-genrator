@@ -1,7 +1,7 @@
 'use client';
 
 import {useRouter, useSearchParams} from 'next/navigation';
-import React, {useState} from 'react';
+import React, {Suspense, useState} from 'react';
 import formdataInterface from '../../../declare/declare.interface';
 import LogoTitle from '@/components/LogoTitle';
 import LogoColor from '@/components/LogoColor';
@@ -10,12 +10,15 @@ import LogoStyle from '@/components/LogoStyle';
 import LogoIdeas from '@/components/LogoIdeas';
 import {useSession} from 'next-auth/react';
 
-export default function page() {
+function CreatePageContent() {
   const [step, setStep] = useState<number>(1);
   const params = useSearchParams();
   const [title, setTitle] = useState<string | null>(params?.get('title') ?? '');
   const [formData, setFormdata] = useState<formdataInterface>({
     title: title || '',
+    name: '',
+    email: '',
+    password: '',
   });
   const router = useRouter();
   const {data: session} = useSession();
@@ -106,5 +109,13 @@ export default function page() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreatePageContent />
+    </Suspense>
   );
 }

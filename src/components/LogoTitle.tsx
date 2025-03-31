@@ -1,10 +1,8 @@
 'use client';
-import {useSearchParams} from 'next/navigation';
 import React, {useState} from 'react';
 import formdataInterface, {ChildProps} from '../../declare/declare.interface';
 
 export default function LogoTitle(props: {handelGetInfo: ChildProps; formData: formdataInterface}) {
-  const params = useSearchParams();
   const [title, setTitle] = useState<string | null>();
 
   return (
