@@ -1,4 +1,4 @@
-import {inference} from '@/lib/huginf';
+import {inference} from '@/lib/hf';
 
 export async function POST() {
   try {
