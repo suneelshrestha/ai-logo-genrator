@@ -2,7 +2,7 @@ import dbConnect from '@/db/db';
 import User from '@/models/user.model';
 import {NextRequest, NextResponse} from 'next/server';
 
-export default async function GET(credential: any) {
+export default async function googlelogin(credential: any) {
   try {
     await dbConnect();
     try {
