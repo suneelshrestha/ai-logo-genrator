@@ -25,14 +25,6 @@ export async function POST(req: Request) {
       const buffer = Buffer.from(await out.arrayBuffer());
       const base64Image = buffer.toString('base64');
 
-      // Save the image to the database
-      await User.findOneAndUpdate(
-        {email: userEmail},
-        {
-          $push: {logos: {image: base64Image}},
-        }
-      );
-
       return NextResponse.json(
         {
           message: 'Image generated successfully',
